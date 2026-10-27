@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dev-radar",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-27",
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "https://withered-firefly-8f38.cloudflareaccess.com",
+    "ACCESS_AUD": "e3935701c0fe190f8d00924b5b17d63adcf06a47f89f02cb52d1b5b4aae4e854"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dev-radar",
+      "database_id": "7100e7ae-9667-410c-9861-02554f6b05dc"
+    }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/mcp"]
+  }
+}

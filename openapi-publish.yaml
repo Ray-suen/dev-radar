@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: Dev Radar news publishing
+  version: 1.0.0
+servers:
+  - url: https://dev-radar.WORKERS_SUBDOMAIN.workers.dev
+paths:
+  /api/admin/issues:
+    post:
+      operationId: publishDailyIssue
+      summary: Publish or replace one daily issue with exactly three articles
+      description: Publish only after checking each article against its source. Repeating a date replaces that issue.
+      security:
+        - publishToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issue'
+      responses:
+        '200':
+          description: Published
+        '400':
+          description: Invalid issue
+        '401':
+          description: Unauthorized
+        '409':
+          description: Article ID or URL conflicts with another issue
+components:
+  securitySchemes:
+    publishToken:
+      type: http
+      scheme: bearer
+  schemas:
+    HeatMetric:
+      type: object
+      additionalProperties: false
+      required: [platform, metric, value, sourceUrl, checkedAt]
+      properties:
+        platform: { type: string, minLength: 1 }
+        metric: { type: string, minLength: 1 }
+        value: { type: number, minimum: 0 }
+        sourceUrl: { type: string, format: uri }
+        checkedAt: { type: string, format: date-time }
+    Article:
+      type: object
+      additionalProperties: false
+      required: [id, title, originalTitle, category, source, publishedAt, url, summary, details]
+      properties:
+        id: { type: string, minLength: 1 }
+        title: { type: string, minLength: 1 }
+        originalTitle: { type: string, minLength: 1 }
+        category: { type: string, minLength: 1 }
+        source: { type: string, minLength: 1 }
+        publishedAt: { type: string, format: date }
+        url: { type: string, format: uri }
+        projectUrl: { type: string, format: uri }
+        discussionUrl: { type: string, format: uri }
+        heat:
+          type: array
+          items: { $ref: '#/components/schemas/HeatMetric' }
+        summary: { type: string, minLength: 1 }
+        details: { type: string, minLength: 1 }
+    Issue:
+      type: object
+      additionalProperties: false
+      required: [date, articles]
+      properties:
+        date: { type: string, format: date }
+        articles:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items: { $ref: '#/components/schemas/Article' }

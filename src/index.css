@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "./styles/specimen-tokens.css";
+@import "./styles/specimen-base.css";
+
+@custom-variant dark (&:where(.dark, .dark *));

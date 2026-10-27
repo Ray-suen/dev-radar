@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dev Radar：每天 3–5 分鐘掌握重要技術動態。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@hanzi.pro/webfonts-iansui@0.1.0/swap.css" rel="stylesheet" />
+    <link rel="icon" href="/dev-radar/favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        var theme = localStorage.getItem('dev-radar-theme') || 'light'
+        var dark = theme === 'dark'
+        document.documentElement.classList.toggle('dark', dark)
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      })()
+    </script>
+    <title>Dev Radar | 每日技術焦點</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

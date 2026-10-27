@@ -1,0 +1,40 @@
+{
+  "name": "dev-radar",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev:worker",
+    "dev:worker": "npm run build && wrangler dev",
+    "build": "tsc -b && vite build",
+    "test:news": "tsx scripts/test-schema.ts",
+    "test:mcp": "tsx scripts/test-mcp.ts",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "setup:publish-token": "tsx scripts/setup-publish-token.ts",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.3.1",
+    "agents": "^0.30.1",
+    "jose": "^6.2.13",
+    "mermaid": "^12.2.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-markdown": "^10.1.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.88.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4",
+    "wrangler": "^4.153.0"
+  }
+}

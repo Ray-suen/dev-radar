@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 type Source = { id: string; title: string; date: string }
 type Exchange = { question: string; answer?: string; sources?: Source[] }
@@ -100,7 +102,12 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
               <p className="assistant-question">{exchange.question}</p>
               {exchange.answer && (
                 <div className="assistant-answer">
-                  <p>{exchange.answer}</p>
+                  <div className="assistant-answer-markdown">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                      table: ({ children }) => <div className="assistant-table-scroll"><table>{children}</table></div>,
+                      img: ({ alt }) => alt ? <span>{alt}</span> : null,
+                    }}>{exchange.answer}</ReactMarkdown>
+                  </div>
                   {!!exchange.sources?.length && (
                     <div className="assistant-sources">
                       <span>相關新聞</span>

@@ -220,7 +220,24 @@ button:active { color: var(--color-accent); }
 .assistant-exchange + .assistant-exchange { margin-top: var(--space-xl); }
 .assistant-question { width: fit-content; max-width: 90%; margin: 0 0 var(--space-md) auto; background: var(--color-ink); color: var(--color-paper); padding: var(--space-sm) var(--space-md); line-height: 1.55; white-space: pre-wrap; }
 .assistant-answer { color: var(--color-ink-2); font-size: 0.9375rem; line-height: 1.75; }
-.assistant-answer > p { margin: 0; white-space: pre-wrap; }
+.assistant-answer-markdown { min-width: 0; overflow-wrap: anywhere; }
+.assistant-answer-markdown > :first-child { margin-top: 0; }
+.assistant-answer-markdown p, .assistant-answer-markdown ul, .assistant-answer-markdown ol, .assistant-answer-markdown blockquote { margin: var(--space-sm) 0; }
+.assistant-answer-markdown ul, .assistant-answer-markdown ol { padding-left: 1.4rem; }
+.assistant-answer-markdown ul { list-style: disc; }
+.assistant-answer-markdown ol { list-style: decimal; }
+.assistant-answer-markdown li + li { margin-top: var(--space-xs); }
+.assistant-answer-markdown h1, .assistant-answer-markdown h2, .assistant-answer-markdown h3, .assistant-answer-markdown h4 { margin: var(--space-lg) 0 var(--space-xs); color: var(--color-ink); font-size: 1rem; font-weight: 650; line-height: 1.4; }
+.assistant-answer-markdown strong { color: var(--color-ink); font-weight: 650; }
+.assistant-answer-markdown a { color: var(--color-accent); }
+.assistant-answer-markdown blockquote { border-left: 2px solid var(--color-rule-2); padding-left: var(--space-sm); }
+.assistant-answer-markdown pre { overflow-x: auto; margin: var(--space-sm) 0; border: var(--rule-hair) solid var(--color-rule); background: var(--color-paper-2); padding: var(--space-sm); }
+.assistant-answer-markdown code { font-family: var(--font-outlier); font-size: 0.85em; }
+.assistant-answer-markdown :not(pre) > code { background: var(--color-paper-2); padding: 0.1em 0.25em; }
+.assistant-table-scroll { max-width: 100%; margin: var(--space-md) 0; overflow-x: auto; }
+.assistant-table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; line-height: 1.5; }
+.assistant-table-scroll th, .assistant-table-scroll td { min-width: 6rem; border: var(--rule-hair) solid var(--color-rule-2); padding: var(--space-xs) var(--space-sm); text-align: left; vertical-align: top; }
+.assistant-table-scroll th { background: var(--color-paper-2); color: var(--color-ink); }
 .assistant-sources { display: grid; gap: var(--space-xs); margin-top: var(--space-md); border-top: var(--rule-hair) solid var(--color-rule); padding-top: var(--space-sm); }
 .assistant-sources > span { color: var(--color-muted); font-size: 0.75rem; }
 .assistant-sources a { font-size: 0.8125rem; line-height: 1.45; }

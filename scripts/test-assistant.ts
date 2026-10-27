@@ -41,7 +41,7 @@ assert.deepEqual(await response.json(), {
   sources: [{ id: 'ai', title: 'OpenAI 推出新模型', date: today }],
 })
 assert.equal(aiCalls.length, 1)
-assert.equal(aiCalls[0].model, '@cf/openai/gpt-oss-120b')
+assert.equal(aiCalls[0].model, '@cf/qwen/qwen3-30b-a3b-fp8')
 
 const currentArticle = await handleAssistant(request('這篇重點是什麼？', 'security'), env)
 assert.equal((await currentArticle.json()).sources[0].id, 'security')

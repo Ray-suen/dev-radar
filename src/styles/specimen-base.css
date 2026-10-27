@@ -250,8 +250,8 @@ button:active { color: var(--color-accent); }
 
 @media (max-width: 40rem) {
   .header-inner { grid-template-columns: 2.5rem minmax(0, 1fr) 2.5rem; min-height: 3.75rem; }
-  .header-inner--search-open { grid-template-columns: 0 minmax(0, 1fr) 4rem; }
-  .header-inner--search-open .search-form { max-width: 13rem; margin-inline: 0; }
+  .header-inner--search-open { grid-template-columns: 0 minmax(0, 1fr) 4.625rem; }
+  .header-inner--search-open .search-form { max-width: none; margin-inline: 0; }
   .hero { padding-block: var(--space-hero-mobile) var(--space-hero-mobile-end); }
   .hero-title { max-width: none; font-size: clamp(2rem, 8vw, 2.5rem); }
   .article-card { display: block; padding-block: var(--space-xl); padding-inline: var(--space-sm); margin-inline: calc(-1 * var(--space-sm)); }

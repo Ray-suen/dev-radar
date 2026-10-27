@@ -71,9 +71,11 @@ The story title opens an article reader at `#/article/:id`, where `summary` and 
 
 The **小助手** button opens a side panel on desktop and a bottom sheet on
 smaller screens. `POST /api/assistant` selects up to three relevant stories from
-the latest 300 articles in D1, then asks Workers AI to answer in Traditional
-Chinese. Answers include links to the selected stories. On an article page, the
-current article is included first. The endpoint accepts a `question` of up to
+the latest 300 articles in D1, then asks `@cf/openai/gpt-oss-120b` to answer in
+Traditional Chinese. The assistant can also explain general technical concepts
+when no story matches. Responses link to related stories when available, without
+presenting general knowledge as article-backed reporting. On an article page,
+questions referring to the current story include it first. The endpoint accepts a `question` of up to
 300 characters and an optional `articleId`. It limits each visitor IP to about
 five requests per minute; Cloudflare's rate limiting is approximate.
 

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 type Source = { id: string; title: string; date: string }
 type Exchange = { question: string; answer?: string; sources?: Source[] }
 
-const suggestions = ['這週有哪些 AI 新聞？', '最近有什麼開發工具更新？', '整理近期的資安新聞']
+const suggestions = ['這週有哪些 AI 新聞？', '最近有什麼開發工具更新？', '什麼是 RAG？']
 
 export function NewsAssistant({ articleId }: { articleId?: string }) {
   const [open, setOpen] = useState(false)
@@ -87,7 +87,7 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
         <div ref={conversationRef} className="assistant-conversation" aria-live="polite">
           {exchanges.length === 0 && (
             <div className="assistant-intro">
-              <p>{articleId ? '可以問我這篇文章，或查找其他本站新聞。我會附上參考連結。' : '想找哪則新聞？我會根據本站文章回答，並附上參考連結。'}</p>
+              <p>{articleId ? '可以問這篇文章、查找本站新聞，也能請我解釋技術名詞。' : '想找新聞或了解技術名詞？我可以幫你整理與解釋。'}</p>
               <div className="assistant-suggestions">
                 {suggestions.map((suggestion) => (
                   <button key={suggestion} type="button" onClick={() => void ask(suggestion)}>{suggestion}</button>
@@ -103,7 +103,7 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
                   <p>{exchange.answer}</p>
                   {!!exchange.sources?.length && (
                     <div className="assistant-sources">
-                      <span>參考新聞</span>
+                      <span>相關新聞</span>
                       {exchange.sources.map((source) => (
                         <a key={source.id} href={`#/article/${encodeURIComponent(source.id)}`} onClick={close}>
                           {source.title} <small>{source.date}</small>
@@ -127,7 +127,7 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
             </svg>
           </button>
         </form>
-        <p className="assistant-footnote">回答由 AI 整理，請點開來源核對。</p>
+        <p className="assistant-footnote">回答由 AI 整理；最新資訊請核對相關新聞。</p>
       </aside>}
     </>
   )

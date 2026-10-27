@@ -13,11 +13,15 @@ assert.deepEqual(selectRelevantArticles(rows, 'OpenAI 有什麼新聞？').map((
 assert.deepEqual(selectRelevantArticles(rows, '幫我整理最近新聞').map(({ id }) => id), ['tool', 'ai', 'security'])
 assert.deepEqual(selectRelevantArticles(rows, '今天有哪些資安新聞？'), [])
 
-let aiCalls = 0
+const aiCalls: { model: string; prompt: string }[] = []
 const env = {
   DB: { prepare: () => ({ all: async () => ({ results: rows }) }) },
   ASSISTANT_RATE_LIMITER: { limit: async () => ({ success: true }) },
-  AI: { run: async () => { aiCalls++; return { response: 'OpenAI 推出新模型，摘要指出速度更快。' } } },
+  AI: { run: async (model: string, options: { messages: { content: string }[] }) => {
+    const prompt = options.messages.at(-1)?.content ?? ''
+    aiCalls.push({ model, prompt })
+    return { choices: [{ message: { content: prompt.includes('RAG') ? 'RAG 是檢索增強生成。' : 'OpenAI 推出新模型，摘要指出速度更快。' } }] }
+  } },
 } as unknown as PublishEnv
 
 const request = (question: unknown, articleId?: string) => new Request('https://example.com/api/assistant', {
@@ -36,16 +40,36 @@ assert.deepEqual(await response.json(), {
   answer: 'OpenAI 推出新模型，摘要指出速度更快。',
   sources: [{ id: 'ai', title: 'OpenAI 推出新模型', date: today }],
 })
-assert.equal(aiCalls, 1)
+assert.equal(aiCalls.length, 1)
+assert.equal(aiCalls[0].model, '@cf/openai/gpt-oss-120b')
 
 const currentArticle = await handleAssistant(request('這篇重點是什麼？', 'security'), env)
 assert.equal((await currentArticle.json()).sources[0].id, 'security')
-assert.equal(aiCalls, 2)
+assert.equal(aiCalls.length, 2)
 
 const noMatch = await handleAssistant(request('今天有哪些資安新聞？'), env)
 assert.equal(noMatch.status, 200)
 assert.deepEqual((await noMatch.json()).sources, [])
-assert.equal(aiCalls, 2)
+assert.equal(aiCalls.length, 3)
+assert.match(aiCalls[2].prompt, /目前沒有找到相關的本站新聞/)
+
+const general = await handleAssistant(request('什麼是 RAG？'), env)
+assert.equal(general.status, 200)
+assert.deepEqual(await general.json(), { answer: 'RAG 是檢索增強生成。', sources: [] })
+assert.equal(aiCalls.length, 4)
+
+const generalFromArticle = await handleAssistant(request('什麼是 RAG？', 'security'), env)
+assert.equal(generalFromArticle.status, 200)
+assert.deepEqual(await generalFromArticle.json(), { answer: 'RAG 是檢索增強生成。', sources: [] })
+assert.doesNotMatch(aiCalls.at(-1)?.prompt ?? '', /使用者目前閱讀的是新聞/)
+
+const emptyEnv = {
+  ...env,
+  DB: { prepare: () => ({ all: async () => ({ results: [] }) }) },
+} as PublishEnv
+const withoutArticles = await handleAssistant(request('什麼是 RAG？'), emptyEnv)
+assert.equal(withoutArticles.status, 200)
+assert.deepEqual(await withoutArticles.json(), { answer: 'RAG 是檢索增強生成。', sources: [] })
 
 const blocked = {
   ...env,

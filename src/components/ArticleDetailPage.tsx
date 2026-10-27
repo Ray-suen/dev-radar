@@ -3,6 +3,7 @@ import type { Article } from '../types/news'
 import { formatHeatValue, groupHeatMetrics } from '../lib/article-heat'
 import { MarkdownDetails } from './MarkdownDetails'
 import { ThemeSelect } from './ThemeSelect'
+import { NewsAssistant } from './NewsAssistant'
 
 type ArticleDetailPageProps = {
   article: Article
@@ -39,7 +40,7 @@ export function ArticleDetailPage({ article, onBack }: ArticleDetailPageProps) {
     window.scrollTo(0, 0)
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') onBack()
+      if (event.key === 'Escape' && !document.body.classList.contains('assistant-open')) onBack()
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
@@ -69,9 +70,7 @@ export function ArticleDetailPage({ article, onBack }: ArticleDetailPageProps) {
           <div className="text-center font-semibold tracking-tight text-stone-500">
             Dev Radar 深入解說
           </div>
-          <nav aria-label="主要導覽" className="theme-nav justify-self-end">
-            <ThemeSelect />
-          </nav>
+          <nav aria-label="主要導覽" className="theme-nav justify-self-end"><ThemeSelect /></nav>
         </div>
       </header>
 
@@ -136,6 +135,7 @@ export function ArticleDetailPage({ article, onBack }: ArticleDetailPageProps) {
           <p className="footer-copy">Dev Radar · 每日三則，為開發者而寫</p>
         </div>
       </footer>
+      <NewsAssistant articleId={article.id} />
     </div>
   )
 }

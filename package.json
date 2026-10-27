@@ -8,6 +8,7 @@
     "dev:worker": "npm run build && wrangler dev",
     "build": "tsc -b && vite build",
     "test:news": "tsx scripts/test-schema.ts",
+    "test:assistant": "tsx scripts/test-assistant.ts",
     "test:mcp": "tsx scripts/test-mcp.ts",
     "lint": "oxlint",
     "preview": "vite preview",

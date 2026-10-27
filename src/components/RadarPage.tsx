@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArticleCard } from './ArticleCard'
 import { ArticleDetailPage } from './ArticleDetailPage'
 import { ThemeSelect } from './ThemeSelect'
+import { NewsAssistant } from './NewsAssistant'
 import type { NewsIssue } from '../types/news'
 
 // Hash routes keep direct article links compatible with static hosting.
@@ -226,9 +227,7 @@ export function RadarPage() {
             <div className="text-center font-semibold tracking-tight text-stone-500">
               Dev Radar
             </div>
-            <nav aria-label="主要導覽" className="theme-nav justify-self-end">
-              <ThemeSelect />
-            </nav>
+            <nav aria-label="主要導覽" className="theme-nav justify-self-end"><ThemeSelect /></nav>
           </div>
         </header>
         <main className="content-container py-16 text-center">
@@ -341,6 +340,7 @@ export function RadarPage() {
           <p className="footer-copy">{text.footer}</p>
         </div>
       </footer>
+      <NewsAssistant />
     </div>
   )
 }

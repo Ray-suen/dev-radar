@@ -14,6 +14,16 @@
       "database_id": "7100e7ae-9667-410c-9861-02554f6b05dc"
     }
   ],
+  "ai": {
+    "binding": "AI"
+  },
+  "ratelimits": [
+    {
+      "name": "ASSISTANT_RATE_LIMITER",
+      "namespace_id": "729041",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

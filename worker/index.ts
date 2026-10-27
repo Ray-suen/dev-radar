@@ -1,6 +1,7 @@
 import { issueSchema } from '../src/lib/news-schema'
 import { publishIssue, readIssues } from './data'
 import { handleMcp } from './mcp'
+import { handleAssistant } from './assistant'
 
 import type { PublishEnv } from './types'
 
@@ -8,6 +9,7 @@ export default {
   async fetch(request: Request, env: PublishEnv, ctx: ExecutionContext): Promise<Response> {
     const path = new URL(request.url).pathname
     if (path === '/mcp') return handleMcp(request, env, ctx)
+    if (path === '/api/assistant' && request.method === 'POST') return handleAssistant(request, env)
     if (path === '/api/admin/issues' && request.method === 'POST') {
       if (!env.PUBLISH_TOKEN || request.headers.get('authorization') !== `Bearer ${env.PUBLISH_TOKEN}`) {
         return Response.json({ error: 'Unauthorized' }, { status: 401 })

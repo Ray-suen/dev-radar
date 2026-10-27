@@ -26,6 +26,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:news
+      - run: npm run test:assistant
       - run: npm run test:mcp
       - run: npm run build
       - run: npx wrangler d1 migrations apply dev-radar --remote

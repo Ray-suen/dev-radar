@@ -19,6 +19,7 @@ Available checks:
 ```bash
 npm run lint
 npm run test:news
+npm run test:assistant
 npm run build
 ```
 
@@ -65,6 +66,20 @@ Required article fields:
 calculate a combined popularity score.
 
 The story title opens an article reader at `#/article/:id`, where `summary` and `details` are rendered. The details support headings, paragraphs, lists, and fenced code blocks.
+
+## News assistant
+
+The **小助手** button opens a side panel on desktop and a bottom sheet on
+smaller screens. `POST /api/assistant` selects up to three relevant stories from
+the latest 300 articles in D1, then asks Workers AI to answer in Traditional
+Chinese. Answers include links to the selected stories. On an article page, the
+current article is included first. The endpoint accepts a `question` of up to
+300 characters and an optional `articleId`. It limits each visitor IP to about
+five requests per minute; Cloudflare's rate limiting is approximate.
+
+The Worker uses the `AI` binding in `wrangler.jsonc`; no separate API key is
+needed in deployed code. Local `wrangler dev` with an AI binding requires
+Cloudflare credentials and inference uses the account's Workers AI allowance.
 
 ## Mermaid diagrams
 

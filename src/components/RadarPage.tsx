@@ -23,6 +23,8 @@ const text = {
   navLabel: '主要導覽',
 }
 
+const visibleArchiveIssueCount = 3
+
 function formatDate(date: string) {
   return new Intl.DateTimeFormat('zh-TW', {
     dateStyle: 'long',
@@ -138,7 +140,7 @@ export function RadarPage() {
     [issues, normalizedQuery],
   )
 
-  const archiveIssues = normalizedQuery ? searchResults : issues.slice(1)
+  const archiveIssues = normalizedQuery ? searchResults : issues.slice(1, visibleArchiveIssueCount + 1)
   const matchedArticles = searchResults.flatMap((issue) => issue.articles.map((article) => ({ article, issueDate: issue.date })))
 
   function closeSearch() {

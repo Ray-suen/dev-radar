@@ -101,4 +101,33 @@ const truncated = await handleAssistant(request('請解釋這項技術'), trunca
 assert.equal(truncated.status, 503)
 assert.deepEqual(await truncated.json(), { error: '回答內容太長，請縮小問題範圍後再試。' })
 
+const searchCalls: { messages: { role: string; content: string }[]; tools?: { function: { description: string } }[] }[] = []
+const searchEnv = {
+  ...emptyEnv,
+  TAVILY_API_KEY: 'test-key',
+  AI: { run: async (_model: string, options: { messages: { role: string; content: string }[]; tools?: { function: { description: string } }[] }) => {
+    searchCalls.push(options)
+    return searchCalls.length === 1
+      ? { choices: [{ message: { content: '', tool_calls: [{ function: { name: 'web_search', arguments: '{"query":"Qwen 更新"}' } }] } }] }
+      : { choices: [{ message: { content: '搜尋結果已整理。' } }] }
+  } },
+} as unknown as PublishEnv
+const originalFetch = globalThis.fetch
+globalThis.fetch = async (input, init) => {
+  assert.equal(String(input), 'https://api.tavily.com/search')
+  assert.equal((JSON.parse(String(init?.body)) as { query: string }).query, 'Qwen 更新')
+  return Response.json({ results: [{ title: 'Qwen 新聞', url: 'https://example.com/qwen', content: '更新內容' }] })
+}
+try {
+  const searched = await handleAssistant(request('Qwen 有什麼更新？'), searchEnv)
+  assert.equal(searched.status, 200)
+  assert.equal(searchCalls.length, 2)
+  assert.equal(searchCalls[0].tools?.[0].function.description, '搜尋網路。')
+  assert.doesNotMatch(searchCalls[0].messages[0].content, /不能把模型記憶當作即時新聞/)
+  assert.match(searchCalls[1].messages.at(-1)?.content ?? '', /網路搜尋結果：\n\[網路1\] Qwen 新聞/)
+  assert.doesNotMatch(searchCalls[1].messages.at(-1)?.content ?? '', /請納入回答/)
+} finally {
+  globalThis.fetch = originalFetch
+}
+
 console.log('Assistant tests passed.')

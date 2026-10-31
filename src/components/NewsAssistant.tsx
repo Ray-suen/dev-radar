@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
-type Source = { id: string; title: string; date: string }
-type Exchange = { question: string; answer?: string; sources?: Source[] }
+type Exchange = { question: string; answer?: string }
 
 const suggestions = ['這週有哪些 AI 新聞？', '最近有什麼開發工具更新？', '什麼是 RAG？']
 
@@ -49,12 +48,18 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
       const response = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ question: submitted, ...(articleId && { articleId }) }),
+        body: JSON.stringify({
+          question: submitted,
+          ...(articleId && { articleId }),
+          history: exchanges.filter((exchange): exchange is Required<Exchange> => !!exchange.answer)
+            .slice(-3)
+            .map(({ question: previousQuestion, answer }) => ({ question: previousQuestion, answer: answer.slice(0, 3000) })),
+        }),
       })
-      const data: { answer?: string; sources?: Source[]; error?: string } = await response.json()
+      const data: { answer?: string; error?: string } = await response.json()
       if (!response.ok || !data.answer) throw new Error(data.error || '助手暫時無法回答，請稍後再試。')
       setExchanges((previous) => previous.map((exchange, index) =>
-        index === previous.length - 1 ? { ...exchange, answer: data.answer, sources: data.sources ?? [] } : exchange,
+        index === previous.length - 1 ? { ...exchange, answer: data.answer } : exchange,
       ))
     } catch (cause) {
       setExchanges((previous) => previous.slice(0, -1))
@@ -108,16 +113,6 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
                       img: ({ alt }) => alt ? <span>{alt}</span> : null,
                     }}>{exchange.answer}</ReactMarkdown>
                   </div>
-                  {!!exchange.sources?.length && (
-                    <div className="assistant-sources">
-                      <span>相關新聞</span>
-                      {exchange.sources.map((source) => (
-                        <a key={source.id} href={`#/article/${encodeURIComponent(source.id)}`} onClick={close}>
-                          {source.title} <small>{source.date}</small>
-                        </a>
-                      ))}
-                    </div>
-                  )}
                 </div>
               )}
             </div>
@@ -134,7 +129,7 @@ export function NewsAssistant({ articleId }: { articleId?: string }) {
             </svg>
           </button>
         </form>
-        <p className="assistant-footnote">回答由 AI 整理；最新資訊請核對相關新聞。</p>
+        <p className="assistant-footnote">回答由 AI 整理；重要資訊請自行查證。</p>
       </aside>}
     </>
   )

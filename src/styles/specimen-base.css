@@ -238,10 +238,6 @@ button:active { color: var(--color-accent); }
 .assistant-table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; line-height: 1.5; }
 .assistant-table-scroll th, .assistant-table-scroll td { min-width: 6rem; border: var(--rule-hair) solid var(--color-rule-2); padding: var(--space-xs) var(--space-sm); text-align: left; vertical-align: top; }
 .assistant-table-scroll th { background: var(--color-paper-2); color: var(--color-ink); }
-.assistant-sources { display: grid; gap: var(--space-xs); margin-top: var(--space-md); border-top: var(--rule-hair) solid var(--color-rule); padding-top: var(--space-sm); }
-.assistant-sources > span { color: var(--color-muted); font-size: 0.75rem; }
-.assistant-sources a { font-size: 0.8125rem; line-height: 1.45; }
-.assistant-sources small { display: block; color: var(--color-muted); font-size: 0.7rem; }
 .assistant-loading, .assistant-error { margin: var(--space-md) 0; font-size: 0.8125rem; }
 .assistant-loading { color: var(--color-muted); }
 .assistant-error { color: var(--color-accent); }
